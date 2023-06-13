@@ -29,6 +29,18 @@
       ],
       "@utils/*": [
         "libs/utils/src/*"
+      ],
+      "@real-time": [
+        "libs/real-time/src"
+      ],
+      "@real-time/*": [
+        "libs/real-time/src/*"
+      ],
+      "@exchanges": [
+        "libs/exchanges/src"
+      ],
+      "@exchanges/*": [
+        "libs/exchanges/src/*"
       ]
     }
   }

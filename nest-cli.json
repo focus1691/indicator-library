@@ -20,6 +20,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/utils/tsconfig.lib.json"
       }
+    },
+    "real-time": {
+      "type": "library",
+      "root": "libs/real-time",
+      "entryFile": "index",
+      "sourceRoot": "libs/real-time/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/real-time/tsconfig.lib.json"
+      }
+    },
+    "exchanges": {
+      "type": "library",
+      "root": "libs/exchanges",
+      "entryFile": "index",
+      "sourceRoot": "libs/exchanges/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/exchanges/tsconfig.lib.json"
+      }
     }
   },
   "compilerOptions": {

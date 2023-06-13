@@ -24,6 +24,9 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/schedule": "^2.2.3",
+    "binance": "^2.8.2",
+    "bybit-api": "^3.7.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "reflect-metadata": "^0.1.13",
@@ -75,7 +78,9 @@
     ],
     "moduleNameMapper": {
       "^technical-analysis/technical-analysis(|/.*)$": "<rootDir>/libs/technical-analysis/src/$1",
-      "^@app/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
+      "^@app/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
+      "^@app/real-time(|/.*)$": "<rootDir>/libs/real-time/src/$1",
+      "^@app/exchanges(|/.*)$": "<rootDir>/libs/exchanges/src/$1"
     }
   }
 }
