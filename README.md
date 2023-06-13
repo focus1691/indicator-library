@@ -4,8 +4,6 @@ This project is a starter pack for anyone looking to get started with technical 
 
 ## Features
 
-Our library includes a suite of powerful, ready-to-use trading indicators:
-
 - **Market Profile**
   - Excess
   - Single Prints
@@ -61,7 +59,3 @@ Contributions are welcome! If you're interested in improving the library, fixing
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-
-Please remember to further explain these Market Profile subpoints if necessary and modify the document to better suit your project's specifics.
