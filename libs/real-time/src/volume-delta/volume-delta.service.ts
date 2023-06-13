@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { Cron, Interval } from '@nestjs/schedule'
-import { CacheService } from '@data-conductor/cache/cache.service'
-import { INTERVALS } from '@data-conductor/candlesticks/candlesticks.types'
-import { Exchange } from '@data-conductor/constants/exchanges'
-import { ISymbols } from '@data-conductor/exchanges/exchanges.types'
+import { INTERVALS } from '@utils/constants/candlesticks'
+import { ISymbols } from '@exchanges/exchanges.types'
 import { BinanceWebSocketService } from '@exchanges/binance/BinanceWebsocketService'
 import { BybitWebSocketService } from '@exchanges/bybit/BybitWebsocketService'
 import { TradeData as BybitTradeData } from '@exchanges/bybit/websocket.responses'
-import { VolumeStorage } from '@volume-delta/volume-delta.types'
+import { VolumeStorage } from '@real-time/volume-delta/volume-delta.types'
 import * as os from 'os'
 
 const intervals: string[] = [
@@ -19,23 +17,59 @@ const intervals: string[] = [
   INTERVALS.ONE_DAY
 ]
 
+const symbols = {
+  BTCUSDT: 'Bitcoin',
+  ETHUSDT: 'Ethereum',
+  XRPUSDT: 'Ripple',
+  BCHUSDT: 'Bitcoin Cash',
+  LTCUSDT: 'Litecoin',
+  DOTUSDT: 'Polkadot',
+  ADAUSDT: 'Cardano',
+  LINKUSDT: 'Chainlink',
+  XLMUSDT: 'Stellar Lumens',
+  EOSUSDT: 'EOS',
+  TRXUSDT: 'TRON',
+  DOGEUSDT: 'Dogecoin',
+  XMRUSDT: 'Monero',
+  DASHUSDT: 'Dash',
+  ZECUSDT: 'Zcash',
+  XTZUSDT: 'Tezos',
+  VETUSDT: 'VeChain',
+  MKRUSDT: 'Maker',
+  OMGUSDT: 'OMG Network',
+  DCRUSDT: 'Decred',
+  ZILUSDT: 'Zilliqa',
+  WAVESUSDT: 'Waves',
+  NANOUSDT: 'Nano',
+  BATUSDT: 'Basic Attention Token',
+  QTUMUSDT: 'Qtum',
+  RVNUSDT: 'Ravencoin',
+  ONTUSDT: 'Ontology',
+  ALGOUSDT: 'Algorand',
+  ENJUSDT: 'Enjin Coin',
+  IOSTUSDT: 'IOST',
+  STMXUSDT: 'StormX',
+  CELRUSDT: 'Celer Network',
+  RENUSDT: 'Ren',
+  SRMUSDT: 'Serum',
+  UNIUSDT: 'Uniswap',
+  COMPUSDT: 'Compound',
+  YFIUSDT: 'Yearn.finance',
+  AAVEUSDT: 'AAVE',
+  SNXUSDT: 'Synthetix',
+  CRVUSDT: 'Curve DAO Token'
+} as ISymbols
+
 @Injectable()
 export class VolumeDeltaService {
   private bybitVolume: VolumeStorage = {}
   private binanceVolume: VolumeStorage = {}
 
-  constructor(
-    private readonly cacheService: CacheService,
-    private readonly bybitWsService: BybitWebSocketService,
-    private readonly binanceWsService: BinanceWebSocketService
-  ) {}
+  constructor(private readonly bybitWsService: BybitWebSocketService, private readonly binanceWsService: BinanceWebSocketService) {}
 
   async onModuleInit() {
-    const bybitData: ISymbols = await this.cacheService.getSymbols(Exchange.BYBIT_USDT_PERPETUAL)
-    const binanceData: ISymbols = await this.cacheService.getSymbols(Exchange.BINANCE_FUTURES)
-
-    const bybitSymbols = Object.keys(bybitData ?? [])
-    const binanceSymbols = Object.keys(binanceData ?? [])
+    const bybitSymbols = Object.keys(symbols)
+    const binanceSymbols = Object.keys(symbols)
 
     const topics: string[] = bybitSymbols.map((symbol: string) => `publicTrade.${symbol}`)
     this.bybitWsService.subscribeToTopics(topics, 'linear')
@@ -125,7 +159,6 @@ export class VolumeDeltaService {
         console.log(`Bybit Volume Delta for ${symbol} [${interval}]: ${bybitDelta}`)
 
         // Cache the delta value before resetting
-        // await this.cacheService.cacheVolumeDelta(Exchange.BYBIT_USDT_PERPETUAL, symbol, interval, bybitDelta)
 
         this.bybitVolume[symbol][interval] = { Buy: 0, Sell: 0 }
       }
@@ -137,7 +170,6 @@ export class VolumeDeltaService {
         console.log(`Binance Volume Delta for ${symbol} (${interval}): ${binanceDelta}`)
 
         // Cache the delta value before resetting
-        // await this.cacheService.cacheVolumeDelta(Exchange.BINANCE_FUTURES, symbol, interval, binanceDelta)
 
         this.binanceVolume[symbol][interval] = { Buy: 0, Sell: 0 }
       }
