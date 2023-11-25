@@ -15,7 +15,6 @@ import { RangesService } from '@technical-analysis/range/range.service'
 import { SIGNAL_DIRECTION, SIGNALS } from '@technical-analysis/signals/signals.types'
 import { TechnicalIndicators } from '@technical-analysis/technicalAnalysis.types'
 import { ICandle, IFundingRateCandle, IOpenInterestCandle } from '@trading/dto/candle.dto'
-import { Exchange } from '@exchanges/constants/exchanges'
 import { IMarketProfile } from './marketProfile/marketProfile.types'
 import { IRanges } from './range/range.types'
 
@@ -91,12 +90,11 @@ export class TechnicalAnalysisService {
     return this.marketProfile.getPrice(data, period, price, goBackByOne)
   }
 
-  private findAndCacheRange(symbol: string, exchange: Exchange, data: ICandle[]): IRanges {
-    const ranges: IRanges = this.rangeService.findRanges(data)
-    return ranges
+  public findRanges(data: ICandle[]): IRanges {
+    return this.rangeService.findRanges(data)
   }
 
-  private calcEMAs(priceKey: string | number, data): IEmaOutcome {
+  public calcEMAs(priceKey: string | number, data): IEmaOutcome {
     return this.emaIndicator.calculateEmas(data.map((v) => v[priceKey]))
   }
 }

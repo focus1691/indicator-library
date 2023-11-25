@@ -1,17 +1,25 @@
 import { Injectable, Logger } from '@nestjs/common'
+import testData from './test-dummy-data/BTCUSDT/kline/30m.json'
+import oneDay from './test-dummy-data/BTCUSDT/kline/1d.json'
 import { INTERVALS, TIME_PERIODS } from '@exchanges/constants/candlesticks.types'
 import { Exchange } from '@exchanges/constants/exchanges'
 import { ISymbols } from '@exchanges/exchanges.types'
 import { IBollingerBandSignal } from '@technical-analysis/indicators/bollingerBands/bollingerBands.types'
 import { EmaCrossingMultiResult } from '@technical-analysis/indicators/movingAverage/movingAverage.types'
 import { PivotPointData } from '@technical-analysis/indicators/pivotPoints/pivotPoints.types'
-import { IMarketProfile } from '@technical-analysis/marketProfile/marketProfile.types'
+import { CANDLE_OBSERVATIONS, IMarketProfile } from '@technical-analysis/marketProfile/marketProfile.types'
+import { IRanges } from '@technical-analysis/range/range.types'
 import { ISignal } from '@technical-analysis/signals/signals.types'
 import { TechnicalAnalysisService } from '@technical-analysis/technical-analysis.service'
 import { ICandle } from '@trading/dto/candle.dto'
-import testData from './test-dummy-data/BTCUSDT/kline/30m.json'
 
 const data = testData.map((data) => ({
+  ...data,
+  openTime: new Date(data.openTime),
+  closeTime: new Date(data.closeTime)
+}))
+
+const BTCUSDT1d = oneDay.map((data) => ({
   ...data,
   openTime: new Date(data.openTime),
   closeTime: new Date(data.closeTime)
@@ -34,6 +42,7 @@ export class AppService {
     this.calculateEmaCrossing(symbol, interval, exchange, data)
     this.calculatePivotPoints(symbol, interval, exchange, data)
     this.calculateMarketProfile(symbolTickSizes, symbol, interval, exchange, data)
+    this.calcRanges(symbol, interval, exchange, BTCUSDT1d)
   }
 
   private calculateEmaCrossing(symbol: string, interval: INTERVALS, exchange: Exchange, candles: ICandle[]) {
@@ -94,6 +103,15 @@ export class AppService {
       }
     } catch (error) {
       this.logger.error(`Failed to calculate Market Profile for ${exchange}, ${symbol}, ${interval}.`, error)
+    }
+  }
+
+  private async calcRanges(symbol: string, interval: INTERVALS, exchange: Exchange, candles: ICandle[]) {
+    try {
+      const ranges: IRanges = this.technicalAnalysisService.findRanges(candles)
+      this.logger.log({ ranges })
+    } catch (error) {
+      this.logger.error(`Error calculating Pivot Points for ${symbol} on ${exchange}`, error)
     }
   }
 }
