@@ -1,4 +1,4 @@
-import { INTERVALS } from '@utils/constants/candlesticks'
+import { INTERVALS } from '@exchanges/constants/candlesticks.types'
 
 export interface ILinearRegression {
   sumX: number

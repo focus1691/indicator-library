@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import moment from 'moment'
-import { TIME_PERIODS } from '@utils/constants/candlesticks'
-import { IKlineExchangeKey } from '@utils/constants/dataTypeExchangeKeys'
-import { round } from '@utils/math'
-import { getTimestampForExchange } from '@utils/time'
-import { IYahooFinanceChart } from '@technical-analysis/yahooFinance/yahooFinance.responses'
+import { TIME_PERIODS } from '@exchanges/constants/candlesticks.types'
+import { round } from '@technical-analysis/utils/math'
+import { IYahooFinanceChart } from '@yahoo-finance/yahooFinance.responses'
 import { ILinearRegression } from '@technical-analysis/regression/regression.types'
+import { ICandle } from '@trading/dto/candle.dto'
 
 @Injectable()
 export class LinearRegressionService {
@@ -41,14 +40,14 @@ export class LinearRegressionService {
     return { sumX, sumY, sumXSquared, sumYSquared, sumXYProducts, meanX, meanY, r, r2 }
   }
 
-  public matchTimeseriesData(exchangeKey: IKlineExchangeKey, klines: any, chart: IYahooFinanceChart, amount: number, duration: string): [number[], number[]] {
+  public matchTimeseriesData(klines: ICandle[], chart: IYahooFinanceChart, amount: number, duration: string): [number[], number[]] {
     let stockIndex = 0
     let klineIndex = 0
     const x: number[] = []
     const y: number[] = []
     const stockTimestamps: number[] = []
     const startOfPeriod = moment().subtract(amount as moment.DurationInputArg1, duration as moment.DurationInputArg2)
-    const klinesInPeriod = klines.filter((kline) => moment(getTimestampForExchange(exchangeKey, kline)).isAfter(startOfPeriod))
+    const klinesInPeriod = klines.filter((kline) => moment(kline.openTime).isAfter(startOfPeriod))
 
     chart.timestamp.forEach((timestamp: number, index: number) => {
       if (moment(timestamp * 1000).isAfter(startOfPeriod)) {
@@ -58,10 +57,10 @@ export class LinearRegressionService {
 
     while (stockIndex < stockTimestamps.length && klineIndex < klinesInPeriod.length) {
       const t1: moment.Moment = moment(chart.timestamp[stockTimestamps[stockIndex]] * 1000)
-      const t2: moment.Moment = moment(getTimestampForExchange(exchangeKey, klinesInPeriod[klineIndex]))
+      const t2: moment.Moment = moment(klinesInPeriod[klineIndex].openTime)
       if (t1.isSame(t2, TIME_PERIODS.DAY)) {
         x.push(chart.indicators.quote[0].high[stockIndex++])
-        y.push(Number(klinesInPeriod[klineIndex++][exchangeKey.close]))
+        y.push(Number(klinesInPeriod[klineIndex++].close))
       } else if (t1.isBefore(t2)) {
         stockIndex++
       } else if (t2.isBefore(t1)) {

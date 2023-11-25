@@ -1,6 +1,6 @@
 # Technical Analysis Library Starter Project
 
-This project is a starter pack for anyone looking to get started with technical analysis in trading. It's built using the NestJS framework and employs a monorepo structure with a library folder. 
+This project is a starter pack for anyone looking to get started with technical analysis in trading. It's built using the NestJS framework and employs a monorepo structure with a library folder.
 
 ## Features
 
@@ -16,7 +16,7 @@ This project is a starter pack for anyone looking to get started with technical 
   - POC, VAH, VAL, EQ, Low, High
 - Exponential Moving Average (EMA)
 - Simple Moving Average (SMA)
-- Open Interest EMA
+- Open Interest Sentiment
 - Peak Detector
 - Range Detector
 - Average True Range (ATR)

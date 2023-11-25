@@ -1,6 +1,6 @@
 
 import { Injectable } from '@nestjs/common'
-import { ZScoreOutput, ZScore } from '@technical-analysis/zscores'
+import { ZScoreOutput, ZScore } from '@technical-analysis/indicators/zscores'
 import { IPeak, IPeakRange } from '@technical-analysis/range/range.types'
 
 @Injectable()

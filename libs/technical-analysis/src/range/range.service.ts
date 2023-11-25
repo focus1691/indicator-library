@@ -1,12 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common'
 import _ from 'lodash'
 import moment from 'moment'
-import { IKlineExchangeKey } from '@utils/constants/dataTypeExchangeKeys'
-import { countDecimals, round } from '@utils/math'
-import { getTimestampForExchange } from '@utils/time'
+import { from, map, toArray } from 'rxjs'
+import { ICandle } from '@trading/dto/candle.dto'
 import { PeakDetector } from '@technical-analysis/peakDetector/peakDetector.service'
 import { bias, FIBONACCI_NUMBERS, IFibonacciRetracement, ILocalRange, IPeak, IRanges, IZigZag } from '@technical-analysis/range/range.types'
-import { from, map, toArray } from 'rxjs'
+import { countDecimals, round } from '@technical-analysis/utils/math'
 
 declare global {
   interface Number {
@@ -29,19 +28,19 @@ export class RangesService {
 
   constructor(@Inject('PeakDetector') private peakDetector: PeakDetector) {}
 
-  private toZigzags(this: { klines: unknown; klineExchangeKey: IKlineExchangeKey }, peaks: IPeak[]): IZigZag {
+  private toZigzags(this: { klines: ICandle[] }, peaks: IPeak[]): IZigZag {
     const zigzag: IZigZag = {} as IZigZag
     for (let i = 0; i < peaks.length; i++) {
       const { position, direction }: IPeak = peaks[i]
-      const close: number = Number(this.klines[position]?.[this.klineExchangeKey.close])
+      const close: number = Number(this.klines[position]?.close)
       if (!zigzag.price) {
         zigzag.direction = direction === 1 ? 'PEAK' : 'TROUGH'
         zigzag.price = close
-        zigzag.timestamp = getTimestampForExchange(this.klineExchangeKey, this.klines[position])
+        zigzag.timestamp = moment(this.klines[position].openTime).unix()
       } else {
         if ((zigzag.direction === 'PEAK' && close > zigzag.price) || (zigzag.direction === 'TROUGH' && close < zigzag.price)) {
           zigzag.price = close
-          zigzag.timestamp = getTimestampForExchange(this.klineExchangeKey, this.klines[position])
+          zigzag.timestamp = moment(this.klines[position].openTime).unix()
         }
       }
     }
@@ -204,13 +203,13 @@ export class RangesService {
     return range
   }
 
-  public findRanges(klineExchangeKey: IKlineExchangeKey, klines): IRanges {
+  public findRanges(klines: ICandle[]): IRanges {
     let local: ILocalRange[] = []
-    const values = klines.map((kline) => Number(kline[klineExchangeKey.close]))
+    const values = klines.map((kline) => kline.close)
 
     from(this.peakDetector.findSignals(values))
       .pipe(
-        map(this.toZigzags.bind({ klines, klineExchangeKey })),
+        map(this.toZigzags.bind({ klines })),
         toArray(),
         map(this.toRanges.bind(this)),
         map(this.mergeRanges),

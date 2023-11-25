@@ -2,7 +2,7 @@
   "name": "indicator-library",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "focus1691",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -78,9 +78,8 @@
     ],
     "moduleNameMapper": {
       "^technical-analysis/technical-analysis(|/.*)$": "<rootDir>/libs/technical-analysis/src/$1",
-      "^@app/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
-      "^@app/real-time(|/.*)$": "<rootDir>/libs/real-time/src/$1",
-      "^@app/exchanges(|/.*)$": "<rootDir>/libs/exchanges/src/$1"
+      "^exchanges(|/.*)$": "<rootDir>/libs/exchanges/src/$1",
+      "^trading(|/.*)$": "<rootDir>/libs/trading/src/$1"
     }
   }
 }

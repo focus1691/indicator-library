@@ -24,23 +24,17 @@
       "@technical-analysis/*": [
         "libs/technical-analysis/src/*"
       ],
-      "@utils": [
-        "libs/utils/src"
-      ],
-      "@utils/*": [
-        "libs/utils/src/*"
-      ],
-      "@real-time": [
-        "libs/real-time/src"
-      ],
-      "@real-time/*": [
-        "libs/real-time/src/*"
-      ],
       "@exchanges": [
         "libs/exchanges/src"
       ],
       "@exchanges/*": [
         "libs/exchanges/src/*"
+      ],
+      "@trading": [
+        "libs/trading/src"
+      ],
+      "@trading/*": [
+        "libs/trading/src/*"
       ]
     }
   }

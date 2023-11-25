@@ -12,24 +12,6 @@
         "tsConfigPath": "libs/technical-analysis/tsconfig.lib.json"
       }
     },
-    "utils": {
-      "type": "library",
-      "root": "libs/utils",
-      "entryFile": "index",
-      "sourceRoot": "libs/utils/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/utils/tsconfig.lib.json"
-      }
-    },
-    "real-time": {
-      "type": "library",
-      "root": "libs/real-time",
-      "entryFile": "index",
-      "sourceRoot": "libs/real-time/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/real-time/tsconfig.lib.json"
-      }
-    },
     "exchanges": {
       "type": "library",
       "root": "libs/exchanges",
@@ -37,6 +19,15 @@
       "sourceRoot": "libs/exchanges/src",
       "compilerOptions": {
         "tsConfigPath": "libs/exchanges/tsconfig.lib.json"
+      }
+    },
+    "trading": {
+      "type": "library",
+      "root": "libs/trading",
+      "entryFile": "index",
+      "sourceRoot": "libs/trading/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/trading/tsconfig.lib.json"
       }
     }
   },
