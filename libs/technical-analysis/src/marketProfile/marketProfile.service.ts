@@ -145,7 +145,7 @@ export class MarketProfileService {
       }
       if (low <= VA.low && klineLowerTail / klineLength > EXCESS_TAIL_LENGTH_SIGNIFICANCE) {
         excess.push({
-          indicator: CANDLE_OBSERVATIONS.FAILED_AUCTION,
+          indicator: CANDLE_OBSERVATIONS.EXCESS,
           intervals: [INTERVALS.THIRTY_MINUTES],
           type: SIGNALS.CANDLE_ANOMALY,
           period: convertTpoPeriodToLetter(i),
@@ -187,7 +187,7 @@ export class MarketProfileService {
           intervals: [INTERVALS.THIRTY_MINUTES],
           type: SIGNALS.CANDLE_ANOMALY,
           period: convertTpoPeriodToLetter(i),
-          direction: SIGNAL_DIRECTION.BULLISH,
+          direction: SIGNAL_DIRECTION.BEARISH,
           peakValue: high,
           troughValue: low
         })
