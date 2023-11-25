@@ -9,15 +9,36 @@ import { IMarketProfile } from '@technical-analysis/marketProfile/marketProfile.
 import { ISignal } from '@technical-analysis/signals/signals.types'
 import { TechnicalAnalysisService } from '@technical-analysis/technical-analysis.service'
 import { ICandle } from '@trading/dto/candle.dto'
+import testData from './test-dummy-data/BTCUSDT/kline/30m.json'
+
+const data = testData.map((data) => ({
+  ...data,
+  openTime: new Date(data.openTime),
+  closeTime: new Date(data.closeTime)
+}))
+
+// For Ticksizes
+const symbolTickSizes = {
+  BTCUSDT: '0.5'
+}
 
 @Injectable()
 export class AppService {
   private logger: Logger
-  constructor(private readonly technicalAnalysisService: TechnicalAnalysisService) {}
+  constructor(private readonly technicalAnalysisService: TechnicalAnalysisService) {
+    this.logger = new Logger(AppService.name)
+    const symbol: string = 'BTCUSDT'
+    const interval: INTERVALS = INTERVALS.THIRTY_MINUTES
+    const exchange: Exchange = Exchange.BINANCE
+    this.calcBollingerCrossover(symbol, interval, exchange, data)
+    this.calculateEmaCrossing(symbol, interval, exchange, data)
+    this.calculatePivotPoints(symbol, interval, exchange, data)
+    this.calculateMarketProfile(symbolTickSizes, symbol, interval, exchange, data)
+  }
 
   private calculateEmaCrossing(symbol: string, interval: INTERVALS, exchange: Exchange, candles: ICandle[]) {
     const emaCrossingMultiResult: EmaCrossingMultiResult = this.technicalAnalysisService.calcEmaCrossing(interval, candles)
-    this.logger.log(emaCrossingMultiResult)
+    this.logger.log({ emaCrossingMultiResult })
     try {
     } catch (error) {
       this.logger.error(`Error calculating EMA Crossing Signal for ${symbol} on ${exchange}`, error)
@@ -27,7 +48,7 @@ export class AppService {
   private calcBollingerCrossover(symbol: string, interval: INTERVALS, exchange: Exchange, candles: ICandle[]) {
     try {
       const bollingerSignal: IBollingerBandSignal | null = this.technicalAnalysisService.calcBollingerCrossover(interval, candles)
-      this.logger.log(bollingerSignal)
+      this.logger.log({ bollingerSignal })
     } catch (error) {
       this.logger.error(`Error calculating Bollinger Crossover Signal for ${symbol} on ${exchange}`, error)
     }
@@ -36,7 +57,7 @@ export class AppService {
   private async calculatePivotPoints(symbol: string, interval: INTERVALS, exchange: Exchange, candles: ICandle[]) {
     try {
       const pivotPoints: PivotPointData = this.technicalAnalysisService.calcPivotPoints(interval, candles)
-      this.logger.log(pivotPoints)
+      this.logger.log({ pivotPoints })
     } catch (error) {
       this.logger.error(`Error calculating Pivot Points for ${symbol} on ${exchange}`, error)
     }

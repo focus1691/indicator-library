@@ -12,7 +12,6 @@ import { MarketProfileService } from '@technical-analysis/marketProfile/marketPr
 import { OpenInterestService } from '@technical-analysis/openInterest/openInterest.service'
 import { IPeakSignal } from '@technical-analysis/peakDetector/peakDetector.types'
 import { RangesService } from '@technical-analysis/range/range.service'
-import { LinearRegressionService } from '@technical-analysis/regression/linearRegression.service'
 import { SIGNAL_DIRECTION, SIGNALS } from '@technical-analysis/signals/signals.types'
 import { TechnicalIndicators } from '@technical-analysis/technicalAnalysis.types'
 import { ICandle, IFundingRateCandle, IOpenInterestCandle } from '@trading/dto/candle.dto'
@@ -36,7 +35,6 @@ export class TechnicalAnalysisService {
     private readonly bollingerBandsIndicator: BollingerBandsIndicator,
     private readonly pivotPointsIndicator: PivotPointsIndicator,
     private readonly vwapIndicator: VWAPIndicator,
-    private readonly linearRegressionService: LinearRegressionService,
     private readonly openInterestService: OpenInterestService
   ) {}
 

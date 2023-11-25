@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
-    "@nestjs/core": "^8.0.0",
-    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/core": "^9.0.5",
+    "@nestjs/platform-express": "^9.0.9",
     "@nestjs/schedule": "^2.2.3",
     "binance": "^2.8.2",
     "bybit-api": "^3.7.0",
