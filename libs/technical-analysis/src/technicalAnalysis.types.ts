@@ -18,12 +18,14 @@ export enum KEY_PRICES {
 export const TECHNICAL_ANALYSIS = 'ta'
 
 export enum TechnicalIndicators {
-  MARKET_PROFILE = 'marketProfile',
-  NPOC = 'npoc',
   RANGES = 'ranges',
-  OPEN_INTEREST_EMAS = 'oiEmas',
   EMA = 'ema',
+  EMA_CROSSING = 'emaCrossing',
+  BOLLINGER_BANDS = 'bollingerBands',
+  PIVOT_POINTS = 'pivotPoints',
   VWAP = 'vwap',
   LINEAR_REGRESSION = 'linearRegression',
-  HARMONICS = 'harmonics'
+  HARMONICS = 'harmonics',
+  OPEN_INTEREST_SENTIMENT = 'openInterestSentiment',
+  FUNDING_RATE_SENTIMENT = 'fundingRateSentiment'
 }
