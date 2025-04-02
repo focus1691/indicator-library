@@ -52,10 +52,4 @@ To get started with this project:
     npm run start
     ```
 
-## Contributing
-
-Contributions are welcome! If you're interested in improving the library, fixing bugs, or adding new indicators, please feel free to fork the repository and submit a pull request.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+📦 Part of the [chart-patterns Library](https://github.com/focus1691/chart-patterns)
